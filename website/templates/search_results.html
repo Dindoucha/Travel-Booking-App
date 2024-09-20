@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Search Results
+{% endblock %}
+
+{% block content %}
+    {% if journeys %}
+        <h1 class="text-2xl font-bold mb-4">Search Results</h1>
+        <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
+            {% for journey in journeys %}
+                <div class="bg-image rounded-lg shadow" style="background-image: url({{ url_for('static', filename='images/' + journey.travel_option+'.jpg') }});">
+                  <div class="rounded-lg shadow p-6" style="backdrop-filter: blur(10px);background-color: #ffffffa0;">
+                    <h2 class="text-lg font-bold mb-2">{{ journey.travel_option }}</h2>
+                    <p class="text-gray-700"><b>{{ journey.departure }}</b> to <b>{{ journey.destination }}</b></p>
+                    <p class="text-gray-700"></p>
+                    <p class="text-gray-700"><b>{{ journey.departure_time.strftime("%Y-%m-%d %H:%M") }}</b> - <b>{{ journey.arrival_time.strftime("%Y-%m-%d %H:%M") }}</b></p>
+                    <p class="text-green-700 font-bold text-xl mt-2">${{ journey.price }}</p>
+                    <p class="text-gray-700">Available Seats: {{ journey.available_seats }}</p>
+                    <a href="{{ url_for('userViews.book_journey', journey_id=journey.id) }}" class="block text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-2">Book Journey</a>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1 class="text-2xl font-bold mb-4">No search results found</h1>
+    {% endif %}
+{% endblock %}

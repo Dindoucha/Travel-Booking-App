@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="text-lg font-semibold mb-4">Add Journey</h2>
+  <form method="POST">
+    {{ form.csrf_token }}
+    <div class="mb-4">
+      <label class="label_class" for="departure">
+        Departure
+      </label>
+      {{ form.departure(class='input_class') }}
+      {% if form.departure.errors %}
+        <p class="text-red-500 text-xs italic">{{ form.departure.errors[0] }}</p>
+      {% endif %}
+    </div>
+    <div class="mb-4">
+      <label class="label_class" for="destination">
+        Destination
+      </label>
+      {{ form.destination(class='input_class') }}
+      {% if form.destination.errors %}
+        <p class="text-red-500 text-xs italic">{{ form.destination.errors[0] }}</p>
+      {% endif %}
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="mb-4">
+        <label class="label_class" for="departure_date">
+          Departure Date
+        </label>
+        {{ form.departure_date(class_='input_class') }}
+        {% if form.departure_date.errors %}
+          <p class="text-red-500 text-xs italic">{{ form.departure_date.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="departure_time">
+          Departure Time
+        </label>
+        {{ form.departure_time(class_='input_class') }}
+        {% if form.departure_time.errors %}
+          <p class="text-red-500 text-xs italic">{{ form.departure_time.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="arrival_date">
+          Arrival Date
+        </label>
+        {{ form.arrival_date(class_='input_class') }}
+        {% if form.arrival_date.errors %}
+          <p class="text-red-500 text-xs italic">{{ form.arrival_date.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="arrival_time">
+          Arrival Time
+        </label>
+        {{ form.arrival_time(class_='input_class') }}
+        {% if form.arrival_time.errors %}
+          <p class="text-red-500 text-xs italic">{{ form.arrival_time.errors[0] }}</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="label_class" for="travel_option">
+        Travel Option
+      </label>
+      {{ form.travel_option(class='input_class') }}
+      {% if form.travel_option.errors %}
+        <p class="text-red-500 text-xs italic">{{ form.travel_option.errors[0] }}</p>
+      {% endif %}
+    </div>
+    <div class="flex items-center justify-between">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">
+        Add Journey
+      </button>
+      <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="{{ url_for('adminViews.home') }}">
+        Cancel
+      </a>
+    </div>
+  </form>
+  <script>
+    var select1 = document.getElementById("departure");
+    var select2 = document.getElementById("destination");
+    
+    select1.addEventListener("change", function() {
+      var selectedValue = this.value;
+      for (var i = 0; i < select2.options.length; i++) {
+        var option = select2.options[i];
+        if (option.value === selectedValue) {
+          option.disabled = true;
+        } else {
+          option.disabled = false;
+        }
+      }
+    });
+    
+    select2.addEventListener("change", function() {
+      var selectedValue = this.value;
+      for (var i = 0; i < select1.options.length; i++) {
+        var option = select1.options[i];
+        if (option.value === selectedValue) {
+          option.disabled = true;
+        } else {
+          option.disabled = false;
+        }
+      }
+    });
+    
+  </script>
+{% endblock %}

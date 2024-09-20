@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mx-auto container">
+    <h1 class="text-3xl font-bold text-center my-6">Your Bookings</h1>
+    {% if bookings %}
+        <table class="w-full text-sm text-left text-gray-900">
+            <thead class="text-xm text-gray-900 uppercase bg-gray-50">
+                <tr>
+                    <th class="hnfj22b3">Booking ID</th>
+                    <th class="hnfj22b3">Departure Time</th>
+                    <th class="hnfj22b3">Arrival Time</th>
+                    <th class="hnfj22b3">From</th>
+                    <th class="hnfj22b3">To</th>
+                    <th class="hnfj22b3">Transport Type</th>
+                    <th class="hnfj22b3">Seats Booked</th>
+                    <th class="hnfj22b3">Amount Paid</th>
+                    <th class="hnfj22b3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr class="bg-white">
+                        <th scope="row" class="hnfj22b3">{{ booking.id }}</th>
+                        <td id="depart{{booking.id}}" class="hnfj22b3">{{ booking.journey.departure_time.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                        <td class="hnfj22b3">{{ booking.journey.arrival_time.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                        <td class="hnfj22b3">{{ booking.journey.departure }}</td>
+                        <td class="hnfj22b3">{{ booking.journey.destination }}</td>
+                        <td class="hnfj22b3">{{ booking.journey.travel_option }}</td>
+                        <td class="hnfj22b3">{{ booking.seats_booked }}</td>
+                        <td class="hnfj22b3">{{ booking.amount_paid }}</td>
+                        <td class="hnfj22b3 flex gap-1">
+                          <a href="{{ url_for('userViews.generate_pdf', booking_id=booking.id) }}" class="block bg-green-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Receipt</a>
+                          <a href="{{ url_for('userViews.cancel_booking', booking_id=booking.id) }}" class="block bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="return sure({{booking.id}})">Cancel</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-center">You haven't made any bookings yet.</p>
+    {% endif %}
+</div>
+<script>
+    function sure(id){
+      const departureTime = document.getElementById("depart"+id).innerText;
+      const [day, month, year, hour, minute, second] = departureTime.split(/\/|\s|:/);
+      const departure = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+      const now = new Date();
+      const daysDiff = Math.floor((departure - now) / (1000 * 60 * 60 * 24));
+      if (daysDiff >= 60) {
+          return confirm('You"ll not be changed. Are you sure you want to cancel?');
+      } else if (daysDiff >= 30) {
+          return confirm(`You will incur charges up to 50% of the booking price. Are you sure you want to cancel?`);
+      } else {
+          return confirm(`You will be charged 100% of the booking price. Are you sure you want to cancel?`);
+      }
+    }
+</script>
+{% endblock %}

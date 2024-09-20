@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mx-auto">
+    <h1 class="text-3xl font-bold mt-10 mb-5">Welcome to our travel booking service</h1>
+    <form class="bg-white p-4 rounded-lg shadow-lg" method="POST" action="{{ url_for('userViews.home') }}">
+      <h2 class="text-xl font-semibold mb-3">Enter your travel details:</h2>
+      {{ form.csrf_token }}
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          {{ form.from_location.label(class="label_class") }}
+          {{ form.from_location(class="input_class",  required="required") }}
+        </div>
+        <div>
+          {{ form.to_location.label(class="label_class") }}
+          {{ form.to_location(class="input_class", required="required") }}
+        </div>
+        <div>
+          {{ form.departure_date.label(class="label_class") }}
+          {{ form.departure_date(class="input_class", required="required", placeholder="YYYY-MM-DD") }}
+        </div>
+        <div class="col-span-2">
+          {{ form.submit(class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full") }}
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    var select1 = document.getElementById("from_location");
+    var select2 = document.getElementById("to_location");
+    
+    select2.getElementsByTagName('option')[1].selected = 'selected' 
+    select2.getElementsByTagName('option')[0].disabled = true 
+
+    select1.addEventListener("change", function() {
+      var selectedValue = this.value;
+      for (var i = 0; i < select2.options.length; i++) {
+        var option = select2.options[i];
+        if (option.value === selectedValue) {
+          option.disabled = true;
+        } else {
+          option.disabled = false;
+        }
+      }
+    });
+    
+    select2.addEventListener("change", function() {
+      var selectedValue = this.value;
+      for (var i = 0; i < select1.options.length; i++) {
+        var option = select1.options[i];
+        if (option.value === selectedValue) {
+          option.disabled = true;
+        } else {
+          option.disabled = false;
+        }
+      }
+    });
+  </script>
+{% endblock %}

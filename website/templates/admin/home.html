@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-2xl font-bold mb-8">Admin Dashboard</h1>
+<div class="w-full bg-white border border-gray-200 rounded-lg shadow">
+  <div class="sm:hidden">
+      <label for="tabs" class="sr-only">Select tab</label>
+      <select id="tabs" class="bg-gray-50 border-0 border-b border-gray-200 text-gray-900 text-sm rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+          <option>Journeys</option>
+          <option>Bookings</option>
+          <option>Transactions</option>
+      </select>
+  </div>
+  <ul class="hidden text-sm font-medium text-center text-gray-500 divide-x divide-gray-200 rounded-lg sm:flex" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+      <li class="w-full">
+          <button id="stats-tab" data-tabs-target="#stats" type="button" role="tab" aria-controls="stats" aria-selected="true" class="inline-block w-full p-4 rounded-tl-lg bg-gray-300 hover:bg-gray-100 focus:outline-none ">Journeys</button>
+      </li>
+      <li class="w-full">
+          <button id="about-tab" data-tabs-target="#about" type="button" role="tab" aria-controls="about" aria-selected="false" class="inline-block w-full p-4 hover:bg-gray-100 focus:outline-none ">Bookings</button>
+      </li>
+      <li class="w-full">
+          <button id="faq-tab" data-tabs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg hover:bg-gray-100 focus:outline-none ">Transactions</button>
+      </li>
+  </ul>
+  <div id="fullWidthTabContent" class="border-t border-gray-200">  
+      <div class="p-4 bg-white rounded-lg md:p-8" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+        <a href="{{ url_for('adminViews.add_journey') }}" class=" block w-80 text-center mx-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Add Journey
+        </a>  
+        <table class="w-full table-auto mt-4">
+          <thead>
+            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <th class="py-3 px-6 text-left">Departure</th>
+              <th class="py-3 px-6 text-left">Destination</th>
+              <th class="py-3 px-6 text-left">Departure Time</th>
+              <th class="py-3 px-6 text-left">Arrival Time</th>
+              <th class="py-3 px-6 text-left">Travel Option</th>
+              <th class="py-3 px-6 text-left">Price</th>
+              <th class="py-3 px-6 text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for journey in journeys %}
+              <tr class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6 text-left">{{ journey.departure }}</td>
+                <td class="py-3 px-6 text-left">{{ journey.destination }}</td>
+                <td class="py-3 px-6 text-left">{{ journey.departure_time }}</td>
+                <td class="py-3 px-6 text-left">{{ journey.arrival_time }}</td>
+                <td class="py-3 px-6 text-left">{{ journey.travel_option }}</td>
+                <td class="py-3 px-6 text-left">{{ journey.price }}</td>
+                <td class="py-3 px-6 text-left">
+                  <a href="{{ url_for('adminViews.edit_journey', id=journey.id) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Edit</a>
+                  <form method="post" action="{{ url_for('adminViews.delete_journey', id=journey.id) }}" style="display: inline-block;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick="return confirm('Are you sure you want to delete this journey?')">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="hidden p-4 bg-white rounded-lg md:p-8" id="about" role="tabpanel" aria-labelledby="about-tab">
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+              <th class="py-3 px-6 text-left">User</th>
+              <th class="py-3 px-6 text-left">Journey</th>
+              <th class="py-3 px-6 text-left">Booking Date</th>
+              <th class="py-3 px-6 text-left">Seats Booked</th>
+              <th class="py-3 px-6 text-left">Amount Paid</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for booking in bookings %}
+              <tr class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6 text-left">{{ booking.user.first_name }} {{ booking.user.last_name }}</td>
+                <td class="py-3 px-6 text-left">{{ booking.journey.departure }} to {{ booking.journey.destination }}</td>
+                <td class="py-3 px-6 text-left">{{ booking.booking_time }}</td>
+                <td class="py-3 px-6 text-left">{{ booking.seats_booked }}</td>
+                <td class="py-3 px-6 text-left">{{ booking.amount_paid }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="hidden p-4 bg-white rounded-lg md:p-8" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+        <!-- <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 "> -->
+          <div class="flex items-center justify-between mb-4">
+              <h5 class="text-xl font-bold leading-none text-gray-900">Latest transactions</h5>
+         </div>
+         <div class="flow-root">
+              <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% if transactions %}
+                {% for transaction in transactions %}
+                  <li class="py-3 sm:py-4">
+                      <div class="flex items-center space-x-4">
+                          <div class="flex-1 min-w-0">
+                              <p class="text-sm font-medium text-gray-900 truncate">
+                                {{transaction.user.first_name}} {{transaction.user.last_name}}
+                              </p>
+                              <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                  {{transaction.user.email}}
+                              </p>
+                          </div>
+                          {% if transaction.is_refund %}
+                            <div class="inline-flex items-center text-base font-semibold text-red-900">  
+                          {% else %}
+                            <div class="inline-flex items-center text-base font-semibold text-green-900">  
+                          {% endif %}
+                          {{transaction.amount}}$
+                          </div>
+                      </div>
+                  </li>
+                  {%endfor%}
+                {% endif %}
+
+              </ul>
+         </div>
+        <!-- </div> -->
+      </div>
+  </div>
+</div>
+<script>
+// Get all tab content
+const tabContent = document.querySelectorAll('[role="tabpanel"]')
+
+// Add click event listener to each tab button
+const tabs = document.querySelectorAll('[data-tabs-target]');
+tabs.forEach(tab => {
+  tab.addEventListener('click', (e) => {
+    const selectedTab = e.currentTarget;
+    const targetTab = document.querySelector(selectedTab.dataset.tabsTarget);
+    const tabButtons = selectedTab.parentElement.parentElement.querySelectorAll('button');
+    tabContent.forEach(content => {
+      content.classList.add('hidden');
+    });
+    targetTab.classList.remove('hidden')
+    tabButtons.forEach(btn => btn.classList.remove('bg-gray-300'));
+    selectedTab.classList.add('bg-gray-300');
+  });
+});
+
+</script>
+{% endblock %}
+

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+  <div class="bg-white rounded-lg shadow-lg p-6 mx-auto w-full lg:w-1/2">
+    <h1 class="text-2xl font-bold mb-4">Register</h1>
+    <form action="{{ url_for('userViews.register') }}" method="POST">
+      {{ form.csrf_token }}
+      <div class="mb-4">
+        <label class="label_class" for="first_name">
+          First Name
+        </label>
+        {{ form.first_name(class="input_class") }}
+        {% if form.first_name.errors %}
+          <p class="tnhia43q">{{ form.first_name.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="last_name">
+          Last Name
+        </label>
+        {{ form.last_name(class="input_class") }}
+        {% if form.last_name.errors %}
+          <p class="tnhia43q">{{ form.last_name.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="email">
+          Email
+        </label>
+        {{ form.email(class="input_class") }}
+        {% if form.email.errors %}
+          <p class="tnhia43q">{{ form.email.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="password">
+          Password
+        </label>
+        {{ form.password(class="input_class") }}
+        {% if form.password.errors %}
+          <p class="tnhia43q">{{ form.password.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="mb-4">
+        <label class="label_class" for="confirm_password">
+          Confirm Password
+        </label>
+        {{ form.confirm_password(class="input_class") }}
+        {% if form.confirm_password.errors %}
+          <p class="tnhia43q">{{ form.confirm_password.errors[0] }}</p>
+        {% endif %}
+      </div>
+      <div class="flex items-center justify-between">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Sign Up
+        </button>
+        <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="{{ url_for('userViews.login') }}">
+          Already have an account? Login.
+        </a>
+      </div>
+    </form>
+    
+      </div>
+    {% endblock %}

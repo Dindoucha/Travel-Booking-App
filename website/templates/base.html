@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Include Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/styles.css')}}">
+  </head>
+  <body class="bg-gray-100">
+  <!-- STYLE CLASSES VARIABLES END -->
+    <!-- Navbar -->
+<nav class="bg-white shadow-lg">
+  <div class="container mx-auto px-4">
+    <div class="aptscvxf">
+      <a class="jr_jv0jm" href="{{ url_for('userViews.home') }}">Travel Booking App</a>
+      <ul class="flex">
+        {% if session.user_id %}
+          {% if session.is_admin %}
+            <li class="ml-4">
+              <a class="fb_28yx0" href="{{ url_for('adminViews.home') }}">Admin</a>
+            </li>
+            {% endif %}
+            <li class="ml-4">
+              <a class="fb_28yx0" href="{{ url_for('userViews.bookings') }}">Bookings</a>
+            </li>
+          <li class="ml-4">
+            <a class="fb_28yx0" href="{{ url_for('userViews.logout') }}">Logout</a>
+          </li>
+        {% else %}
+          <li class="ml-4">
+            <a class="fb_28yx0" href="{{ url_for('userViews.login') }}">Login</a>
+          </li>
+          <li class="ml-4">
+            <a class="xfdg0zn5" href="{{ url_for('userViews.register') }}">Sign Up</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+    <!-- Main content -->
+    <main>
+      <div class="container mx-auto px-4 py-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if category == 'error' %}
+                <div class="bg-red-200 text-red-800 py-2 px-4 mb-4">{{ message }}</div>
+              {% elif category == 'success' %}
+                <div class="bg-green-200 text-green-800 py-2 px-4 mb-4">{{ message }}</div>
+              {% else %}
+                <div class="bg-gray-200 text-gray-800 py-2 px-4 mb-4">{{ message }}</div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </body>
+</html>
